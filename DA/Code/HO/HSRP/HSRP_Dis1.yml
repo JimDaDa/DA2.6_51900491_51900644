@@ -1,0 +1,50 @@
+---
+- name: Configure HSRP on Dis1 for VLANs 10-14 (Active)
+  hosts: Dis1
+  gather_facts: no
+  vars_files:
+    - pass.yml
+    - VLAN_vars.yml
+  tasks:
+    - name: Configure IP SLA for Internet Check
+      ios_config:
+        lines:
+          - ip sla 1
+          - icmp-echo 8.8.8.8 source-interface Port-Channel1 
+          - frequency 5
+          - ip sla schedule 1 life forever start-time now
+
+    - name: Configure HSRP for VLANs 10-14
+      ios_config:
+        lines:
+          - interface Vlan {{ item.vlan_id }}
+          - standby {{ item.vlan_id }} ip 192.168.{{ item.vlan_id }}.1
+          - standby {{ item.vlan_id }} priority 110
+          - standby {{ item.vlan_id }} preempt
+          - standby {{ item.vlan_id }} track 1 decrement 50
+      with_items: "{{ vlans }}"
+      when: item.vlan_id >= 10 and item.vlan_id <= 14
+
+    - name: Configure HSRP for VLANs 15-19 (Backup)
+      ios_config:
+        lines:
+          - interface Vlan {{ item.vlan_id }}
+          - standby {{ item.vlan_id }} ip 192.168.{{ item.vlan_id }}.1
+          - standby {{ item.vlan_id }} priority 90
+          - standby {{ item.vlan_id }} track 1 decrement 50
+      with_items: "{{ vlans }}"
+      when: item.vlan_id >= 15 and item.vlan_id <= 19
+
+    - name: Configure HSRP for VLANs Management
+      ios_config:
+        lines:
+          - interface Vlan 1
+          - standby 1 ip 172.10.1.1
+          - standby 1 priority 110
+          - standby 1 preempt
+          - standby 1 track 1 decrement 50
+
+    - name: Save configuration
+      ios_command:
+        commands:
+          - write
