@@ -1,0 +1,50 @@
+---
+- name: Configure Authentication 802.1x
+  hosts: Access 
+  gather_facts: no
+  vars_files:
+    - pass.yml
+    - VLAN_vars.yml
+
+  tasks:
+    - name: Enable Authentication 802.1x 
+      ios_config:
+        lines:
+          - aaa authorization network default group radius
+          - dot1x system-auth-control
+          - aaa authentication dot1x default group radius
+
+    - name: Enable Authentication 802.1x on Access Interface at sw F1
+      ios_config:
+        lines:
+          - interface {{ item }}        
+          - authentication port-control auto
+          - authentication host-mode multi-host
+          - dot1x pae authenticator
+      with_items: "{{F1MB_Access_interfaces}}"
+      when: inventory_hostname == "F1_MB" 
+
+    - name: Enable Authentication 802.1x on Access Interface at sw F2
+      ios_config:
+        lines:
+          - interface {{ item }}        
+          - authentication port-control auto
+          - authentication host-mode multi-host
+          - dot1x pae authenticator
+      with_items: "{{F2MB_Access_interfaces}}"
+      when: inventory_hostname == "F2_MB" 
+
+    - name: Enable Authentication 802.1x on Access Interface at sw F3
+      ios_config:
+        lines:
+          - interface {{ item }}        
+          - authentication port-control auto
+          - authentication host-mode multi-host
+          - dot1x pae authenticator
+      with_items: "{{F3MB_Access_interfaces}}"
+      when: inventory_hostname == "F3_MB"          
+
+    - name: Save configuration
+      cisco.ios.ios_command:
+        commands:
+          - write

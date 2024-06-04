@@ -1,0 +1,18 @@
+- name: Configure OSPF Core1MB
+  hosts: Core1_MB
+  gather_facts: no
+  vars_files:
+    - OSPF_vars.yml
+    - pass.yml
+  tasks:
+    - name: Enable OSPF on interfaces
+      ios_config:
+        lines:
+          - "{{ item }}"
+          -  ip ospf 10 area 0
+      with_items: "{{ core_interfaces }}"
+
+    - name: Save configuration
+      cisco.ios.ios_command:
+        commands:
+          - write
