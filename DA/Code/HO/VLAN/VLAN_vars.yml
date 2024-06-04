@@ -1,0 +1,70 @@
+vlans:
+  - vlan_id: 1
+    department: Management
+    subnetmask: 255.255.255.224
+  - vlan_id: 10
+    department: LETAN_HO
+    subnetmask: 255.255.255.240
+  - vlan_id: 11
+    department: HR_HO
+    subnetmask: 255.255.255.128
+  - vlan_id: 12
+    department: MARKETING_HO
+    subnetmask: 255.255.255.128
+  - vlan_id: 13
+    department: KETOAN_HO
+    subnetmask: 255.255.255.128
+  - vlan_id: 14
+    department: IT_HO
+    subnetmask: 255.255.255.128
+  - vlan_id: 15
+    department: KIEMTOAN_HO
+    subnetmask: 255.255.255.192
+  - vlan_id: 16
+    department: TRUYENTHONG_HO
+    subnetmask: 255.255.255.128
+  - vlan_id: 17
+    department: PTBV_HO
+    subnetmask: 255.255.255.192
+  - vlan_id: 18
+    department: GIAMDOC_HO
+    subnetmask: 255.255.255.224
+  - vlan_id: 19
+    department: PHOGIAMDOC_HO
+    subnetmask: 255.255.255.192
+
+dis_Trunking_interfaces:
+  - e0/2
+  - e0/3
+  - e1/0
+  - e1/1
+  - e1/2
+
+access_Trunking_interfaces:
+  - e0/0
+  - e0/1
+
+F1_Access_interfaces:
+  - e0/2
+  - e0/3
+
+F2_Access_interfaces:
+  - e0/2
+  - e0/3
+  - e1/0
+  - e1/1
+
+F3_Access_interfaces:
+  - e0/2
+  - e0/3
+
+F4_Access_interfaces:
+  - e0/2
+  - e0/3
+  - e1/0
+  - e1/1
+
+F5_Access_interfaces:
+  - e0/2
+  - e0/3
+  - e1/0
